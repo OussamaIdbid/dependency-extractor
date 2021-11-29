@@ -58,10 +58,8 @@ Promise.all(
           const resolveArr = [];
           Object.keys(actions).forEach((action) => {
             const actionObj = actions[action];
-            const packages = [];
             const ids = [];
             actionObj.resolves.forEach((r) => {
-              packages.push(r.path.split(">")[0]);
               ids.push(r.id);
             });
 
@@ -69,7 +67,6 @@ Promise.all(
               cmd: `npm ${actionObj.action} ${actionObj.module}${
                 actionObj.target ? `@` + actionObj.target : ""
               } ${actionObj.depth ? "--depth " + actionObj.depth : ""}`,
-              packages: packages,
               ids: ids,
             };
 
@@ -166,7 +163,7 @@ Promise.all(
         });
       });
     }
-
+    
     data.push([]);
   })
 ).then(() => {
