@@ -1,0 +1,69 @@
+{
+    "name": "holmes-email-service",
+    "version": "0.2.0",
+    "description": "Send emails based on templates",
+    "main": "app.js",
+    "scripts": {
+        "start:dev": "cross-env NODE_ENV=dev pm2 startOrReload process.json",
+        "start:prod": "cross-env NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+        "test": "cross-env NODE_ENV=test nyc mocha --exit && npm run test:report",
+        "test:report": "nyc report --reporter=lcov --reporter=html",
+        "test:db": "docker rm $(docker stop unit-test-mysql); docker run --name unit-test-mysql --detach --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" --publish 3306:3306 mysql:5.7.21",
+        "start:local": "cross-env NODE_ENV=local node app.js",
+        "start:local:watch": "cross-env NODE_ENV=local nodemon app.js",
+        "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+        "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+        "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "author": "laura.merlo@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+        "aws-sdk-mock": "^4.4.0",
+        "chai": "^4.2.0",
+        "chai-things": "^0.2.0",
+        "dmd-bitbucket": "^0.1.10",
+        "docdash": "^1.1.0",
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.16.0",
+        "jsdoc": "^3.5.5",
+        "mocha": "^6.1.2",
+        "nock": "^10.0.6",
+        "nodemon": "^1.18.11",
+        "nyc": "^13.3.0"
+    },
+    "dependencies": {
+        "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+        "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+        "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+        "aws-sdk": "^2.437.0",
+        "cross-env": "^5.2.0",
+        "handlebars": "^4.1.1",
+        "inline-css": "^2.4.1",
+        "jsdoc-to-markdown": "^4.0.1",
+        "jsdom": "^14.0.0",
+        "lodash": "^4.17.15",
+        "nodemailer": "^6.1.0",
+        "request": "^2.88.0",
+        "sanitize-html": "^1.20.0",
+        "seneca": "^3.20.2"
+    },
+    "nyc": {
+        "include": [
+            "app.js",
+            "lib/**"
+        ],
+        "clean": true
+    },
+    "mocha": {
+        "bail": true,
+        "full-trace": true,
+        "file": [
+            "test/email-service.js"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-email-service.git"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "name": "holmes-client-ecosystem",
+    "version": "0.0.1",
+    "description": "Create client ecosystem based of a client configuration file",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test": "NODE_ENV=test nyc mocha -b --timeout 10000 --exit",
+      "test:db:start": "docker run -d --name=unit-test-mysql --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -p 3306:3306 mysql:5.5",
+      "test:db:stop": "docker stop unit-test-mysql; docker rm unit-test-mysql",
+      "postversion": "/bin/bash sonar-version"
+    },
+    "author": "guido.dubois@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^4.3.3",
+      "eslint": "^3.14.1",
+      "eslint-config-airbnb-base": "^11.0.1",
+      "eslint-plugin-import": "^2.2.0",
+      "mocha": "^8.3.0",
+      "nyc": "^15.1.0",
+      "rimraf": "^2.5.4"
+    },
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "bcrypt": "^5.0.0",
+      "lodash": "^4.17.15",
+      "mime-types": "^2.1.14",
+      "moment": "^2.17.1",
+      "ncp": "^2.0.0",
+      "node-schedule": "^1.2.5",
+      "seneca": "^3.20.2",
+      "uuid": "^3.0.1"
+    }
+  }
+  

@@ -1,0 +1,65 @@
+{
+  "name": "holmes-ticket-service",
+  "version": "0.1.0",
+  "description": "Get ticket log data",
+  "main": "app.ts",
+  "scripts": {
+    "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+    "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+    "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 ts-node app.ts",
+    "test": "NODE_ENV=test HOLMES_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SELF_SIGNED_CERT_IN_CHAIN=0 mocha -r ts-node/register ./lib/**/*.test.ts --exit",
+    "local": "NODE_ENV=local node app.js",
+    "local:watch": "NODE_ENV=local nodemon --config nodemon.json app.js",
+    "test:db": "docker rm $(docker stop unit-test-mysql); docker run --name unit-test-mysql --detach --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" --publish 3306:3306 mariadb:10.2.21; npm run test:db:mongo;",
+    "test:db:mongo": "docker rm $(docker stop unit-test-mongo); docker run --name unit-test-mongo --detach --publish 27017:27017 mongo;",
+    "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+    "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+    "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+  },
+  "author": "jesse@surelock.nl",
+  "license": "ISC",
+  "dependencies": {
+    "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+    "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+    "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+    "chai-sorted": "^0.2.0",
+    "lexorank": "^1.0.4",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.5.4",
+    "seneca": "^3.20.2",
+    "util.promisify": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.10.3",
+    "@types/seneca": "^2.1.11",
+    "chai": "^4.2.0",
+    "dmd-bitbucket": "^0.1.10",
+    "docdash": "^1.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jsdoc": "^3.6.3",
+    "jsdoc-to-markdown": "^5.0.3",
+    "mocha": "^7.1.0",
+    "nyc": "^15.0.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-ticket-service.git"
+  },
+  "nyc": {
+    "include": [
+      "app.js",
+      "lib/**"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "clean": true
+  }
+}

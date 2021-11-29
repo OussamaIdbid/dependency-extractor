@@ -1,0 +1,54 @@
+{
+    "name": "holmes-blacklist-service",
+    "version": "0.3.0",
+    "description": "blacklist service managed through seneca",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test": "NODE_ENV=test nyc mocha -b -exit && npm run test:report",
+      "test:db": "docker stop unit-test-mysql; docker rm unit-test-mysql; docker run -d --name=unit-test-mysql --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -p 3306:3306 mysql:5.5.54",
+      "test:report": "nyc report --reporter=lcov --reporter=html",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "directories": {
+      "test": "test"
+    },
+    "author": "guido.dubois@pti.nl",
+    "license": "ISC",
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "lodash": "^4.17.15",
+      "parse-domain": "^2.3.4",
+      "seneca": "^3.20.2"
+    },
+    "devDependencies": {
+      "chai": "^3.5.0",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "eslint": "^3.19.0",
+      "eslint-config-airbnb-base": "^11.2.0",
+      "eslint-plugin-import": "^2.2.0",
+      "jsdoc": "^3.6.3",
+      "jsdoc-to-markdown": "^5.0.3",
+      "mocha": "^7.0.0",
+      "nyc": "^15.0.0"
+    },
+    "nyc": {
+      "include": [
+        "app.js",
+        "lib/**"
+      ],
+      "clean": true
+    },
+    "repository": {
+      "type": "git",
+      "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-blacklist-service.git"
+    }
+  }
+  

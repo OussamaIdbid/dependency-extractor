@@ -1,0 +1,51 @@
+{
+    "name": "holmes-general-data-service",
+    "version": "0.0.2",
+    "description": "Get general data",
+    "main": "app.js",
+    "directories": {
+      "lib": "lib",
+      "test": "test"
+    },
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test": "NODE_ENV=test nyc mocha -b --exit && npm run test:report",
+      "test:db": "docker rm $(docker stop unit-test-mysql); docker run --name unit-test-mysql --detach --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" --publish 3306:3306 mysql:5.7",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "/bin/bash sonar-version",
+      "test:report": "nyc report --reporter=lcov --reporter=html"
+    },
+    "author": "jarno@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^4.1.1",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "eslint": "^3.14.0",
+      "eslint-config-airbnb": "^14.0.0",
+      "eslint-plugin-import": "^2.2.0",
+      "istanbul": "^0.4.5",
+      "jsdoc": "^3.5.5",
+      "jsdoc-to-markdown": "^4.0.1",
+      "mocha": "5.0.1",
+      "nyc": "^11.4.1"
+    },
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "lodash": "^4.17.15",
+      "seneca": "^3.20.2"
+    },
+    "nyc": {
+      "include": [
+        "app.js",
+        "lib/**"
+      ],
+      "clean": true
+    }
+  }
+  

@@ -1,0 +1,49 @@
+{
+    "name": "holmes-security-coach-api",
+    "version": "0.1.0",
+    "description": "Holmes Security Coach API",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "cross-env NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "cross-env NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "cross-env NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon app.js",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "/bin/bash sonar-version"
+    },
+    "devDependencies": {
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "jsdoc": "^3.5.5",
+      "jsdoc-to-markdown": "^4.0.1",
+      "eslint": "^6.8.0",
+      "eslint-config-airbnb": "^18.0.1",
+      "nodemon": "^2.0.2",
+      "office-addin-dev-certs": "^1.4.13"
+    },
+    "dependencies": {
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "body-parser": "^1.19.0",
+      "connect-redis": "^4.0.3",
+      "cookie-parser": "^1.4.4",
+      "cors": "^2.8.5",
+      "cross-env": "^6.0.3",
+      "dotenv": "^10.0.0",
+      "express": "^4.17.1",
+      "express-session": "^1.17.0",
+      "helmet": "^3.23.3",
+      "hpp": "^0.2.3",
+      "jsonwebtoken": "^8.5.1",
+      "lodash": "^4.17.15",
+      "passport": "^0.4.1",
+      "passport-jwt": "^4.0.0",
+      "passport-local": "^1.0.0",
+      "passport-saml": "^1.2.0",
+      "rate-limiter-flexible": "^2.2.2",
+      "redis": "^2.8.0",
+      "seneca": "^3.20.2",
+      "striptags": "^3.1.1",
+      "token-session": "file:token-session-1.1.2.tgz"
+    }
+  }
+  

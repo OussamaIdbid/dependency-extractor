@@ -1,0 +1,59 @@
+{
+    "name": "holmes-person-service",
+    "version": "0.2.0",
+    "description": "Manage Persons",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node --expose-gc app.js",
+      "start:local:watch": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon app.js",
+      "test": "NODE_ENV=test nyc mocha -b && npm run test:report",
+      "test:db": "docker rm $(docker stop unit-test-mysql); docker run --name unit-test-mysql --detach --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" --publish 3306:3306 mysql:5.7.21",
+      "test:report": "nyc report --reporter=lcov --reporter=html",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "author": "laura.merlo@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^4.2.0",
+      "chai-things": "^0.2.0",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "eslint": "^3.19.0",
+      "eslint-config-airbnb": "^15.0.1",
+      "eslint-plugin-import": "^2.6.1",
+      "nyc": "^11.4.1",
+      "jsdoc": "^3.5.5",
+      "mocha": "^3.4.2",
+      "nock": "^9.0.22",
+      "nodemon": "^1.11.0"
+    },
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "bcrypt": "^3.0.8",
+      "elasticsearch": "^13.3.1",
+      "jsdoc-to-markdown": "^4.0.1",
+      "lodash": "^4.17.15",
+      "moment": "^2.18.1",
+      "moment-timezone": "^0.5.17",
+      "seneca": "^3.20.2",
+      "uuid": "^3.1.0"
+    },
+    "nyc": {
+      "include": [
+        "app.js",
+        "lib/**"
+      ],
+      "clean": true
+    },
+    "repository": {
+      "type": "git",
+      "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-person-service.git"
+    }
+  }
+  

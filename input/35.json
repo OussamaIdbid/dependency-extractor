@@ -1,0 +1,58 @@
+{
+    "name": "holmes-statistics-service",
+    "version": "0.1.0",
+    "description": "Get statistiscs log data",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test": "NODE_ENV=test HOLMES_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SELF_SIGNED_CERT_IN_CHAIN=0 nyc mocha -b --exit",
+      "local": "NODE_ENV=local node app.js",
+      "local:watch": "NODE_ENV=local nodemon --config nodemon.json app.js",
+      "test:db": "docker rm $(docker stop unit-test-mysql); docker run --name unit-test-mysql --detach --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" --publish 3306:3306 mariadb:10.2.21; npm run test:db:mongo;",
+      "test:db:mongo": "docker rm $(docker stop unit-test-mongo); docker run --name unit-test-mongo --detach --publish 27017:27017 mongo;",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "author": "laura.merlo@pti.nl",
+    "license": "ISC",
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/holmes-database-client": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-client.git#0.6.0",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "chai-sorted": "^0.2.0",
+      "lodash": "^4.17.15",
+      "mongodb": "^3.5.4",
+      "seneca": "^3.20.2"
+    },
+    "devDependencies": {
+      "chai": "^4.2.0",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^1.2.0",
+      "eslint": "^6.8.0",
+      "eslint-config-airbnb-base": "^14.0.0",
+      "eslint-plugin-import": "^2.20.1",
+      "jsdoc": "^3.6.3",
+      "jsdoc-to-markdown": "^5.0.3",
+      "mocha": "^7.1.0",
+      "nyc": "^15.0.0"
+    },
+    "repository": {
+      "type": "git",
+      "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-statistics-service.git"
+    },
+    "nyc": {
+      "include": [
+        "app.js",
+        "lib/**"
+      ],
+      "reporter": [
+        "lcov",
+        "text-summary"
+      ],
+      "clean": true
+    }
+  }
+  

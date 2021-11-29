@@ -1,0 +1,41 @@
+{
+    "name": "holmes-permission-manager",
+    "version": "0.0.1",
+    "description": "Permission control service",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test": "NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -b --check-leaks",
+      "test:db": "docker stop unit-test-mysql; docker rm unit-test-mysql; docker run -d --name=unit-test-mysql --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -p 3306:3306 mysql:5.5.54",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "author": "guido@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^3.5.0",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "eslint": "^3.16.1",
+      "eslint-config-airbnb-base": "^11.1.0",
+      "eslint-plugin-import": "^2.2.0",
+      "istanbul": "^0.4.5",
+      "jsdoc": "^3.5.5",
+      "jsdoc-to-markdown": "^3.0.0",
+      "mocha": "^3.2.0"
+    },
+    "dependencies": {
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "lodash": "^4.17.15",
+      "mongodb": "^3.1.6",
+      "seneca": "^3.20.2"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git@bitbucket.org:ptiinnovatie/holmes-permission-service.git"
+    }
+  }
+  

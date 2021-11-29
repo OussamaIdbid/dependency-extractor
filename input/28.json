@@ -1,0 +1,49 @@
+{
+    "name": "holmes-po-service",
+    "version": "0.0.2",
+    "description": "Manage po files",
+    "main": "app.js",
+    "directories": {
+        "lib": "lib",
+        "test": "test"
+    },
+    "scripts": {
+        "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+        "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+        "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+        "test": "NODE_ENV=test nyc mocha -b && npm run test:report",
+        "test:report": "nyc report --reporter=lcov --reporter=html",
+        "test:db": "docker rm $(docker stop unit-test-mongo); docker run --name unit-test-mongo --detach --publish 27017:27017 mongo;",
+        "postversion": "jsdoc2md --template README.hbs --separators --files lib/*.js > README.md; /bin/bash sonar-version; jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'; git push"
+    },
+    "author": "jarno@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+        "chai": "^4.1.1",
+        "docdash": "^0.4.0",
+        "eslint": "4.18.1",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-plugin-import": "2.9.0",
+        "jsdoc": "^3.4.3",
+        "jsdoc-to-markdown": "4.0.1",
+        "mocha": "5.0.1",
+        "nyc": "^11.4.1"
+    },
+    "dependencies": {
+        "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+        "lodash": "^4.17.15",
+        "mongodb": "^3.0.2",
+        "seneca": "^3.20.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@bitbucket.org:ptiinnovatie/holmes-po-service.git"
+    },
+    "nyc": {
+        "include": [
+            "app.js",
+            "lib/**"
+        ],
+        "clean": true
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "name": "holmes-database-service",
+    "version": "0.1.0",
+    "description": "Handle all MySQL database connections",
+    "main": "app.js",
+    "scripts": {
+      "start:dev": "NODE_ENV=dev NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:prod": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+      "start:acc": "NODE_ENV=production pm2 startOrReload process.json",
+      "start:local": "NODE_ENV=local NODE_TLS_REJECT_UNAUTHORIZED=0 node app.js",
+      "test:db": "docker stop unit-test-mysql; docker rm unit-test-mysql; docker run -d --name=unit-test-mysql --env=\"MYSQL_ALLOW_EMPTY_PASSWORD=yes\" -p 3306:3306 mysql:5.5.54;",
+      "test": "NODE_ENV=test ENCRYPTION_KEY=My32charPasswordAndInitVectorStr node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -b --check-leaks --globals tokens",
+      "docs:readme": "jsdoc2md --template README.hbs --plugin dmd-bitbucket --separators --files lib/*.js > README.md",
+      "docs:update": "jsdoc -c .jsdoc.json; git add docs; git commit -am 'update docs'",
+      "postversion": "npm run docs:readme; /bin/bash sonar-version; npm run docs:update; git push"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+ssh://git@bitbucket.org:ptiinnovatie/holmes-database-service.git"
+    },
+    "author": "laura.merlo@pti.nl",
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^3.5.0",
+      "dmd-bitbucket": "^0.1.10",
+      "docdash": "^0.4.0",
+      "eslint": "^3.19.0",
+      "eslint-config-airbnb": "^15.0.0",
+      "eslint-plugin-import": "^2.2.0",
+      "eslint-plugin-jsx-a11y": "^5.0.1",
+      "eslint-plugin-react": "^7.0.1",
+      "istanbul": "^0.4.5",
+      "jsdoc": "^3.5.5",
+      "jsdoc-to-markdown": "^3.0.0",
+      "mocha": "^3.4.1"
+    },
+    "dependencies": {
+      "@pti-innovatie/database-mysql": "git+ssh://git@bitbucket.org/ptiinnovatie/database-mysql.git#3.7.3",
+      "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+      "dotenv": "^5.0.1",
+      "eslint-config-airbnb-base": "^11.2.0",
+      "lodash": "^4.17.15",
+      "mysql": "^2.15.0",
+      "seneca": "^3.20.2",
+      "winston": "^2.4.1",
+      "winston-daily-rotate-file": "^3.0.0"
+    }
+  }
+  

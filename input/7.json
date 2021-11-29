@@ -1,0 +1,13 @@
+{
+    "name": "holmes-database",
+    "version": "1.0.0",
+    "description": "Manage database migrations",
+    "scripts": {},
+    "author": "jarno@pti.nl",
+    "license": "ISC",
+    "dependencies": {
+      "lodash": "^4.17.15",
+      "mysql": "^2.18.1"
+    }
+  }
+  

@@ -1,0 +1,45 @@
+{
+    "name": "holmes-phishing-application",
+    "version": "0.0.5",
+    "description": "Application that presents the phishing site",
+    "main": "app.js",
+    "scripts": {
+        "start:local": "cross-env NODE_ENV=local node app.js",
+        "start:prod": "cross-env NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 pm2 startOrReload process.json",
+        "start:dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=dev pm2 startOrReload process.json",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@bitbucket.org/ptiinnovatie/holmes-phishing-application.git"
+    },
+    "author": "guido.dubois@pti.nl",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/ptiinnovatie/holmes-phishing-application#readme",
+    "devDependencies": {
+        "eslint": "^4.5.0",
+        "eslint-config-airbnb": "^15.1.0",
+        "eslint-config-airbnb-base": "^11.3.2",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-jsx-a11y": "^5.1.1",
+        "eslint-plugin-react": "^7.3.0"
+    },
+    "dependencies": {
+        "@pti-innovatie/logger": "git+ssh://git@bitbucket.org:ptiinnovatie/logger.git#3.4.0",
+        "body-parser": "^1.18.1",
+        "compression": "^1.7.0",
+        "cookie-parser": "^1.4.3",
+        "cross-env": "^5.2.0",
+        "csurf": "^1.9.0",
+        "express": "^4.15.4",
+        "express-device": "^0.4.2",
+        "file-loader": "^0.11.2",
+        "handlebars": "^4.7.3",
+        "hpp": "^0.2.2",
+        "ip-range-check": "^0.2.0",
+        "lodash": "^4.17.15",
+        "parse-domain": "^2.1.2",
+        "seneca": "^3.20.2",
+        "ua-parser-js": "^0.7.21"
+    }
+}
